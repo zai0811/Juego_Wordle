@@ -95,7 +95,10 @@ function mostrarMensaje(mensaje) {
 const button = document.getElementById("guess-button");
 button.addEventListener("click", intentar);
 const reiniciar=document.getElementById("reiniciar");
-reiniciar.addEventListener("click", "load");
+reiniciar.addEventListener("click", function() {
+    // Recarga la página
+    location.reload();
+});
 // inicialmente va mostrar los intentos disponibles
 actualizarIntentos();
 
