@@ -32,18 +32,22 @@ body {
   }
      
   .letter {
+    width: 20px; /* Ancho deseado */
+    height: 20px; /* Alto deseado */
       border: 1px solid black;
-      padding: 3px;
-      margin: 3px;
+      padding: 5px;
+      margin: 0px 13px 0px 13px ;
       min-width: 20px;
       text-align: center;
-      display: inline-block
+      display: inline-block;
   }
      
   .row{
       margin-bottom: 10px;
+ 
   }
-     
+  
+
   .input-area{
       margin: 30px;
   }
@@ -101,4 +105,40 @@ body {
 #guess-button, #reiniciar {
   display: inline-block;
   margin-right: 10px; /* Espacio entre los botones */
+}
+
+
+table {
+  border-collapse: collapse;
+  width: 20%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border: 5px ;
+}
+
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  tex
+ 
+
+
+  
+}
+
+th {
+  background-color: #0CBABA; /* Fondo de la primera fila (encabezados) */
+  color: white; /* Color de texto en la primera fila */
+}
+
+th.acertado {
+  background-color: green; /* Fondo verde para "Acertado" */
+}
+
+th.posicion-incorrecta {
+  background-color: yellow; /* Fondo amarillo para "Posición Incorrecta" */
+}
+
+th.no-existe {
+  background-color: gray; /* Fondo gris para "No Existe" */
 }

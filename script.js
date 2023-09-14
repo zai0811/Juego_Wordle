@@ -4,7 +4,44 @@ let diccionario = ['APPLE', 'HURLS', 'WINGS', 'YOUTH'];
 let caracteresAcertados = 0;
 
 // Palabra seleccionada de la lista para comparar
-const palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+//const palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+
+
+
+
+let palabra = "";
+const API = "https://random-word-api.herokuapp.com/word?length=5&lang=es";
+fetch(API)
+    .then((response) => response.json())
+    .then((response) => {
+        palabra = response[0].toUpperCase();
+        console.log(palabra);
+
+
+    })
+    .catch((err) => {
+        console.log(err);
+        deshabilitarBoton(true, "gray");
+        palabra = diccionario[Math.floor(Math.random() * diccionario.length)].toUpperCase();
+        console.log(palabra);
+
+        setTimeout(() => {
+            deshabilitarBoton(false, "#0CBABA");; // Habilita el botón y restaura su color normal después de un cierto tiempo (puedes ajustar el tiempo según tus necesidades)
+        }, 2000); // Habilita el botón después de 2 segundos (ejemplo)
+    });
+
+
+function deshabilitarBoton(estado, color) {
+    const button = document.getElementById("guess-button");
+    button.disabled = estado;
+    button.style.backgroundColor = color;
+}
+
+
+// Matriz para rastrear las posiciones de los caracteres acertados
+const caracteresAcertadosPosiciones = new Array(palabra.length).fill(false);
+
+
 
 // Función para actualizar la vista con los intentos restantes
 function actualizarIntentos() {
@@ -20,17 +57,28 @@ function intentar() {
     ROW.className = 'row';
     let palabraIngresada = document.getElementById("guess-input").value.toUpperCase(); // Convertir a mayúsculas para comparar
 
+
     if (nroIntentos > 0 && (palabraIngresada.length == palabra.length)) {
         for (let i = 0; i < palabraIngresada.length; i++) {
             //crea la etiqueta "spam" que son cada uno de los elementos de l fila  y llama al estilo  "letter"(style.css)
             const SPAN = document.createElement('span');
+            SPAN.style.borderRadius = '5px';
             SPAN.className = 'letter';
             //va cambiando el color dependiendo del estado
             //si acierta la letra en esa posicion "caracteresAcertados" suma 1
             if (palabraIngresada[i] === palabra[i]) {
-                caracteresAcertados++;
-                SPAN.innerHTML = palabraIngresada[i];
-                SPAN.style.backgroundColor = 'green';
+                //si la posicion es true significa que ya esta pintado y no cuenta ese caracter
+                if (caracteresAcertadosPosiciones[i]) {
+                    SPAN.innerHTML = palabraIngresada[i];
+                    SPAN.style.backgroundColor = 'green';
+                    //caso contrario cuenta
+                } else {
+                    caracteresAcertados++;
+                    caracteresAcertadosPosiciones[i] = true; // Marcar como acertado
+                    console.log("caracteresAcertados " + caracteresAcertados);
+                    SPAN.innerHTML = palabraIngresada[i];
+                    SPAN.style.backgroundColor = 'green';
+                }
             } else if (palabra.includes(palabraIngresada[i])) {
                 SPAN.innerHTML = palabraIngresada[i];
                 SPAN.style.backgroundColor = 'yellow';
@@ -69,11 +117,11 @@ function mostrarMensaje(mensaje) {
     const modal = document.getElementById("myModal");
     const mensajeModal = document.getElementById("modal-message");
     //dispara un modal cuanndo termine el juego
-    if (mensaje=="PERDISTE"){
+    if (mensaje == "PERDISTE") {
         mensajeModal.style.color = 'red'
         mensajeModal.innerHTML = mensaje;
     }
-    else if (mensaje=="GANASTE"){
+    else if (mensaje == "GANASTE") {
         mensajeModal.style.color = 'green'
         mensajeModal.innerHTML = mensaje;
     }
@@ -94,8 +142,8 @@ function mostrarMensaje(mensaje) {
 // Agregar un event listener al botón de "Intentar"
 const button = document.getElementById("guess-button");
 button.addEventListener("click", intentar);
-const reiniciar=document.getElementById("reiniciar");
-reiniciar.addEventListener("click", function() {
+const reiniciar = document.getElementById("reiniciar");
+reiniciar.addEventListener("click", function () {
     // Recarga la página
     location.reload();
 });
